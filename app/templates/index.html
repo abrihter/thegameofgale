@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+	    <meta name="author" content="Bojan">
+	    <title>{{ config.APP_TITLE }}</title>
+		<style>
+			table, th, td {
+				 border: 0px solid black;
+				 border-collapse: collapse;
+			}
+			.button {
+				background-color: #4CAF50;
+				border: none;
+				color: white;
+				padding: 15px 15px;
+				text-align: center;
+				text-decoration: none;
+				display: inline-block;
+				font-size: 8px;
+				margin: 0px 0px;
+				cursor: pointer;
+				width: 30px;
+			}
+			.button1 {width: 250px;}
+			.button2 {width: 50%;}
+		</style>
+	</head>
+	<body>
+		<center><h1>{{ config.APP_TITLE }}</h1></center>
+		<hr><br>
+		Player: <b>{{ player }}</b> | <a href="/new">Start New Game</a>
+		{% if win %}
+		<hr><br>
+		<center><h2>Winner is player ::{{ win }}::</h2></center>
+		<br>
+		{% endif %}
+		<hr><br>
+		<center>
+		<form action="/move" method="post">
+		<input name="player" value="{{ player }}" type="hidden"/>
+		<table>
+			{% for row in table %}
+				{% set rowloop = loop %}
+				<tr>
+				{% for c in row %}
+					{% if c == '' %}
+					<td width="30" height="30">
+						<button name="move-button" value="{{ rowloop.index0  }}_{{ loop.index0 }}" class="button"></button>
+					</td>
+					{% else %}
+						<td width="30" height="30"  {% if c in ['red', 'blue', 'RED', 'BLUE'] %}bgcolor="{{ c }}"{% endif %}></td>
+					{% endif %}
+				{% endfor %}
+				</tr>
+			{% endfor%}
+		</table>
+		</center>
+	</body>
+</html>
+
