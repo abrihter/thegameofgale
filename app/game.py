@@ -6,7 +6,6 @@ __license__ = ""
 __version__ = "1.0.0"
 __maintainer__ = "Bojan"
 
-import sys
 from flask import render_template, request, redirect, url_for
 from app import app
 
@@ -32,7 +31,6 @@ class GaleGame:
         :param list table: table data set
         :parma str cp: Current player set
         '''
-        sys.setrecursionlimit(4000)
         self.current_player = cp
         #table init with starting colors and empty spaces for links
         if table:
