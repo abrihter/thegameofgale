@@ -12,18 +12,23 @@ from app.game import GaleGame
 
 @app.route('/')
 @app.route('/index')
-def index():
+@app.route('/index/<int:dimensions>')
+def index(dimensions=None):
     '''index'''
     table = session.get('table', None)
     player = session.get('player', None)
+    if dimensions == None:
+        dimensions = GaleGame.TABLE_MAX_WIDTH
+        return new_game(dimensions)
     #set default player
     if not player:
-        player = 'blue'
-    game = GaleGame(table=table, cp=player)
+        player = GaleGame.PLAYER_1
+    game = GaleGame(table=table, cp=player, table_width=dimensions)
     session['table'] = game.table
     session['player'] = game.current_player
+    session['dimensions'] = game.TABLE_MAX_WIDTH
     return render_template('index.html', table=game.table,
-        player=game.current_player)
+        player=game.current_player, dimensions=game.TABLE_MAX_WIDTH)
 
 @app.route('/move', methods=['POST'])
 def move():
@@ -32,21 +37,24 @@ def move():
         move = request.form['move-button']
         player = session.get('player', None)
         table = session.get('table', None)
-        game = GaleGame(table=table, cp=player)
+        dimensions = session.get('dimensions', None)
+        game = GaleGame(table=table, cp=player, table_width=dimensions)
         if game.move(move):
             return render_template('index.html', table=game.table,
-                player=game.current_player, win=game.current_player)
+                player=game.current_player, dimensions=game.TABLE_MAX_WIDTH,
+                win=game.current_player)
         session['player'] = game.current_player
         session['table'] = game.table
-    return redirect('/index')
+        session['dimensions'] = game.TABLE_MAX_WIDTH
+    return redirect('/index/{}'.format(dimensions))
 
-@app.route('/new')
-def new_game():
+@app.route('/new/<int:dimensions>')
+def new_game(dimensions):
     '''new game'''
     if 'table' in session:
         del session['table']
     if 'player' in session:
         del session['player']
-    return redirect ('/index')
+    return redirect ('/index/{}'.format(dimensions))
 
 

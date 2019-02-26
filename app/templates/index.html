@@ -29,9 +29,13 @@
 		</style>
 	</head>
 	<body>
-		<center><h1>{{ config.APP_TITLE }}</h1></center>
+		<center><h1>{{ config.APP_TITLE }} {{ dimensions }}x{{ dimensions }}</h1></center>
 		<hr><br>
-		Player: <b>{{ player }}</b> | <a href="/new">Start New Game</a>
+		Player: <b>{{ player }}</b> 
+		| <a href="/new/5">Start New Game [5]</a>
+		| <a href="/new/7">Start New Game [7]</a>
+		| <a href="/new/9">Start New Game [9]</a>
+		| <a href="/new/11">Start New Game [11]</a>
 		{% if win %}
 		<hr><br>
 		<center><h2>Winner is player ::{{ win }}::</h2></center>
@@ -41,6 +45,7 @@
 		<center>
 		<form action="/move" method="post">
 		<input name="player" value="{{ player }}" type="hidden"/>
+		<input name="dimensions" value="{{ dimensions }}" type="hidden"/>
 		<table>
 			{% for row in table %}
 				{% set rowloop = loop %}
